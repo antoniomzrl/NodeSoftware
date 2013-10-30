@@ -1,0 +1,194 @@
+
+“In order to be efficient it would be helpful if you could bring with you a laptop on which linux is already installed as well as several libraries for different languages like python, django , ..... You will find  in the attachment some instructions on how you can prepare your computer for setting up a database. More detailed information can be found under the following link:
+
+http://www.vamdc.org/documents/nodesoftware/index.html “
+
+
+
+A prerequisite for the database
+
+To build the database, it is easier (advisable) to use Linux (or Unix) as the operating system.
+In this case the following preparation steps  are necessary (also available on VAMDC documentation: VAMDC installation):
+
+a) Python 2.7
+You can find the python version on the official website:
+→ http://www.python.org/download/releases/2.7/
+Or via the command sudo apt-get install python2.7 on a Unix terminal.
+To check the installation, type python in a terminal. You should enter in the python shell with recognizable >>> at the beginning of the line.
+→ Type exit() to quit
+
+
+
+
+b) Libraries for VAMDC
+Here, we can find the required libraries:
+→ https://pypi.python.org/pypi
+For each library proceed like that:
+→ Download the archive file
+→ Exctract
+→ Go into the folder via a terminal (cd /folder/)
+→ Type the command: python setup.py install
+If a problem of permission arises, type: chmod +x setup.py
+If it doesn’t work use the following commands for each installation:
+Python-pip : sudo apt-get install python-pip
+Python-pyparsing : sudo apt-get install python-pyparsing
+Python-mysqldb : sudo apt-get install python-mysqldb
+
+
+
+c) Software
+To use a server, some software has to be installed:
+→ sudo apt-get install gunicorn nginx git-core ipython
+→ sudo apt-get install mysql
+
+
+d) Django
+Django is a web framework written in Python and dedicated for example to publish data on the Internet. The purpose of this is to quickly and easily create Website structures using a database.
+Django installation:
+→ sudo pip install django
+
+
+
+e) Checking installation
+You can now test the installation with the following commands:
+(before: you can download the NodeSoftware as  tar.gz  at these locations: https://github.com/VAMDC/NodeSoftware/tarball/release)
+→ python -c ''import django''
+→ python -c ''import pyparsing''
+→ cd /path/to/NodeSoftware (see the link above to obtain this folder)
+→ cd nodes/ExampleNode
+→ ./manage.py
+→ ./manage.py test
+→ ./manage.py shell
+If a problem of permission arises type: chmod +x manage.py
+
+
+
+
+f) Required Installation for node VAMDC
+You should now install four additional libraries:
+→ periodictable
+→ suds
+→ south
+→ pybtex
+ For each:
+→ Download the archive
+→ Extract
+→ cd /directory/
+→ python setup.py (chmod +x setup.py if problem of permission).
+Complete installation.
+
+
+Local server Installation (if you can’t do that, don’t worry...) 
+To avoid the use of an external server we can use the computer as a local server.
+a) Configuration
+First of all, you have to create the base with MySQL in a terminal:
+→ mysql
+→ create database 'your_database'
+Before running  the server, you have to edit the file settings.py in NodeSoftare/nodes/YOURFOLDER/settings.py.
+Here you can configure your access to the database:
+DATABASE:
+→ ENGINE: 'django.db.backends.mysql' for mysql
+→ NAME: Name of your database 
+→ USER: Name of the user (default root)
+→ PASSWORD: Password for access to the base defined in the installation mysql, if not  empty by default
+→ HOST and PORT: empty
+ADMIN: 
+Write the pairs ('User Name', 'email') separated by ','
+Access Pathway by Web features:
+→ STATICFILES_DIRS: ("/PATHTO/NodeSoftwaremaster/nodes/YOURDATABASE/static/")
+→ MEDIA_ROOT and MEDIA_URL: '/PATHTO/NodeSoftwaremaster/nodes/YOURDATABASE/static/media/'
+
+
+
+b) Start the server
+To start the server you have just to do:
+→ cd PATHTO/ NodeSoftware-master/nodes/YOURDATABASE
+→ ./manage.py syncdb (only the first time or after a modification of the database)
+WARNING:
+You will be asked if you want to save a user admin, answer 'yes' and follow the instructions.
+→ ./manage.py runserver
+WARNING:
+runserver will launch a development server not to be used in the final version.
+Then you can access to the website at the following address: http://127.0.0.1:8000/
+
+
+
+
+
+Hola Antonio,
+
+Te reenvío la secuencia que propone el diseñador de la base de datos para crear nuestro nodo. Los nodos están visibles en las páginas de VAMDC (Googlea VAMDC consortium y te sale todo), además de información adicional sobre el software utilizado y otras herramientas relacionadas. La página concreta de nodos es:
+
+ http://casx019-zone1.ast.cam.ac.uk/registry     
+
+Los datos de entrada son:
+
+U: vamdc
+P: deploy-ws
+
+De: Guy Rixon [mailto:guyrixon@gmail.com]
+Enviado el: miércoles, 02 de octubre de 2013 14:39
+Para: g.garcia@iff.csic.es
+Asunto: Booting a RADAM node from IDEADB template
+
+Hi Gustavo,
+
+
+appended is the recommended sequence for making a new node from IDEADB parts. Send me mail if anything isn't clear.
+ 
+
+ 
+
+Proposed sequence for booting a new node in RADAM
+
+This works for the nodes containing elementary processes about electrons and positrons. It isn’t applicable to the ion-interaction, multiscale and bio-molecules nodes.
+
+1. Get an account on GitHub. Go to http://github.com and register. This gets you free, shared space in which you can store your changes to the node-software tree.
+
+2. FInd the repository on GitHub called VAMDC/NodeSoftware. This contains the common part of the node software - that shared between nodes - and the node-specific parts for most of the nodes, including IDEA DB.
+
+3. Fork the VAMDC/NodeSoftware repository. This creates a copy of the node-software repository on GitHub, controlled by you, in which you can write your changes and additions. It doesn’t make any files on your own computer.
+
+4. Clone the repository that you created in the previous step. This copies the software to your own computer for editing.
+
+[Detailed instructions on the GitHub operations are on their web-site and also in the node-software documentation. Note that forking is something you do in the GitHub web-site and cloning is a command you do on your own computer.
+
+In the next steps we are working inside the copy of the node software on your computer.]
+
+5. Make a new directory inside NodeSoftware/nodes/ named for your new node: e.g. NodeSoftware/nodes/radam-positron.  cd into the directory for your new node
+
+6. Copy into this new directory all the files from the ExampleNode branch of the tree. This sets up enough configuration to create your settings.py.
+
+7. Run the command python manage.py. This initializes settings.py in your current directory.
+
+8. Run the mysql command-line client. Create an empty database for your node. Create a user called radam, with a password, and give that user privilege to use the new database. Come out of the mysql tool.
+
+9. Edit settings.py. Set the kind of database (to mysql), the name of the database, the db user (radam) and that user’s password. Set the address of the MySQL server to 127.0.0.1 (don’t leave it blank). Preferably, fill in the other fields of the settings.py.
+
+10. Copy the python files from the IDEADB branch of the node-software tree. Copy only the files from the node/ subdirectory of IDEADB, not the settings.py, and put them in the node/ sub-directory of your node.
+
+11. Create the database schema: python manage.py syncdb. This infers the table structure from the Django model copied from IDEADB in the previous step.
+
+12. Edit node/*.py to change the hard-coded, colliding particle as appropriate. This is only needed for the positron nodes; the electron-collision nodes can use the code as copied.
+
+13. Edit node/dictionaries.py to change the identity of the node from IDEADB (first entry in returnables dictionary).
+
+14. Start the node (python maqnage.py runserver) and go to the admin interface with a web-browser. You should now have a web form for loading the database. Happy shovelling!
+
+
+
+
+-----------------------------
+Mantenemos “species” pues son los átomos, moléculas, etc. para los que metamos datos. 
+
+“States” no es indicativo en nuestro caso, sin embargo, una vez definida la especie sí nos interesa distinguir entre fase gaseosa o condensada, por lo que podríamos dividir en dos, es decir un apartado 
+“phase” que tenga dos posibilidades: gas phase o condensed phase. 
+
+“Transitions” se puede mantener, se refiere a los procesos para los que tienes datos. Estos podrían ser: “elastic”, “rotational excitation” “vibrational excitation””electronic excitation” “ionisation” and “positronium formation”.
+
+Por último “Refs” son las referencias. Te recuerdo que esta base de datos se basa exclusivamente en datos publicados, por lo que cada vez aue se añadan datos hay una ref. Además, como dices, los datos se suben en tablas ASCI y hay unos campos ya definidos  para comentarios. Todavía no vamos a subir datos, empieza por definir esta estructura y luego hablamos.
+-----------------------------
+
+
+
+
