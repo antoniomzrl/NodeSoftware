@@ -1,0 +1,41 @@
+--------------
+SELECT USER FROM mysql.user
+--------------
+
+USER
+radam
+radamu
+radam
+root
+root
+
+root
+
+debian-sys-maint
+radam
+radamu
+root
+--------------
+SELECT USER, HOST FROM mysql.user
+--------------
+
+USER	HOST
+radam	%
+radamu	%
+radam	127.0.0.1
+root	127.0.0.1
+root	::1
+	cmt2540
+root	cmt2540
+	localhost
+debian-sys-maint	localhost
+radam	localhost
+radamu	localhost
+root	localhost
+--------------
+SHOW GRANTS FOR radamu
+--------------
+
+Grants for radamu@%
+GRANT ALL PRIVILEGES ON *.* TO 'radamu'@'%' IDENTIFIED BY PASSWORD '*B473D1CECCA226A5119CD72647A4E57733E03CE7'
+GRANT ALL PRIVILEGES ON `radamdb`.* TO 'radamu'@'%'

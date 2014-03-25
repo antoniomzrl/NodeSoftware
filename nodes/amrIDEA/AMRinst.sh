@@ -50,14 +50,33 @@ if [ $1 == "test" ] ; then
     #exit()
 fi
 
-
+UP="-uradamu -pradamp"
+UPR="-uroot -pbigbang1"
 
 if [ $1 == "dbinit" ] ; then
-    mysql -u root -p --verbose < dbinit.sql
+    mysql $UPR --verbose <<EOF
+    CREATE DATABASE IF NOT EXISTS radamdb;
+    CREATE USER radamu IDENTIFIED BY 'radamp';
+    GRANT ALL PRIVILEGES ON *.* TO radamu;
+    GRANT ALL PRIVILEGES ON *.* TO 'radamu'@'localhost';
+    # Problem ERROR 1045:
+    SET PASSWORD FOR radamu@localhost=PASSWORD('radamp');
+EOF
+elif [ $1 == "dbdelete" ] ; then
+    mysql $UPR --verbose <<EOF
+    DROP DATABASE radamdb;
+EOF
+elif [ $1 == "dbshow" ] ; then
+    mysql $UP --verbose <<EOF
+    SELECT USER FROM mysql.user;
+    SELECT USER, HOST FROM mysql.user;
+    SHOW GRANTS FOR radamu;
+    SHOW DATABASES;
+EOF
 elif [ $1 == "dbschema" ] ; then
-    mysql -u radamu -pradamp --verbose < dbschema.sql
+    mysql $UP --verbose < dbschema.sql
 elif [ $1 == "dbingest" ] ; then
-    mysql -u radamu -pradamp --verbose < dbingest.sql
+    mysql $UP --verbose < dbingest.sql
 fi
 
 
@@ -74,10 +93,10 @@ fi
 
 
 if [ $1 == "dbbackup" ] ; then
-    mysqldump -u radamu -pradamp radamdb > radamdb.bck
+    mysqldump $UP radamdb > radamdb.bck
     #scp radposdb.bck user@remote.box.com:
 elif [ $1 == "dbrestore" ] ; then
-    mysql -u radamu -pradamp radamdb < radamdb.bck
+    mysql $UP radamdb < radamdb.bck
 fi
 
 
